@@ -4,14 +4,12 @@ name: Publicar en Instagram
 # de más sin duplicar posts, y una corrida perdida se recupera en la siguiente.
 # Corre cada 2 horas para que ninguna caída se coma el post del día.
 on:
-  schedule:
-    - cron: "23 */2 * * *"
   workflow_dispatch:
     inputs:
       simulacro:
         description: "Simulacro: muestra qué publicaría, sin publicar"
         type: boolean
-        default: false
+        default: true
 
 concurrency:
   group: publicar-instagram
