@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+content-studio/template/.preview.html
+content-studio/template/.preview-tipografias.html
+content-studio/template/fonts/pruebas/
+content-studio/output/_tipografias/
+content-studio/output/_grilla.jpg
+content-studio/template/.preview-grilla.html
+content-studio/template/.preview-*.html

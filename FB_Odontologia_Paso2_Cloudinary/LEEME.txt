@@ -1,0 +1,9 @@
+PASO 2 - CLOUDINARY
+
+1. Ejecutá APLICAR_CLOUDINARY_WINDOWS.bat.
+2. En Cloudinary: Dashboard > Go to API Keys.
+3. Copiá la API Environment Variable completa (CLOUDINARY_URL).
+4. En tu proyecto ejecutá CONFIGURAR_CLOUDINARY_WINDOWS.bat.
+5. Pegá la variable cuando te la pida. No la compartas por chat.
+6. Esperá a que diga: LISTO: Cloudinary quedo conectado.
+7. NO ejecutes ENCOLAR_Y_SIMULAR_WINDOWS.bat hasta confirmar la conexión.

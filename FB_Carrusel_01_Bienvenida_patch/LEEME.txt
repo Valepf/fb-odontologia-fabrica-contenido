@@ -1,0 +1,14 @@
+F.B. ODONTOLOGIA - CARRUSEL 01 BIENVENIDA
+
+Este parche reemplaza solo el contenido del primer carrusel y el cierre de marca.
+No hace falta volver a ejecutar npm install.
+
+COMO USARLO
+1. Copiar las carpetas/archivos de este ZIP dentro de la carpeta raiz:
+   FB_Odontologia_Fabrica_Contenido_v1
+2. Cuando Windows pregunte si queres reemplazar archivos, elegir SI / Reemplazar.
+3. Ejecutar RENDER_PRUEBA_WINDOWS.bat.
+4. El resultado queda en:
+   content-studio\output\01-bienvenida-fb
+
+El carrusel tiene 5 placas y el cierre usa @f.b.odontologia.

@@ -1,0 +1,14 @@
+/* Identidad visual · Fabián Beltrán Odontología
+   Color institucional según manual: RGB 14/18/59 · #0E123B. */
+
+:root {
+  --primario: #0e123b;
+  --oscuro: #07091f;
+  --claro: #fbfbfa;
+
+  /* Fallbacks. `npm run fuentes` embebe las familias de marca.json. */
+  --display: "Arial", sans-serif;
+  --texto: Georgia, serif;
+
+  --margen: 88px;
+}

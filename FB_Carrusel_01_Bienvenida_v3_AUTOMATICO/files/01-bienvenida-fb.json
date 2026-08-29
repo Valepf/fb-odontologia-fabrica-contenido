@@ -1,0 +1,45 @@
+{
+  "categoria": "institucional",
+  "etiqueta": "bienvenida",
+  "persona": "paciente",
+  "slides": [
+    {
+      "tipo": "portada",
+      "numero": "01",
+      "titulo": "Una odontología *cercana y profesional*",
+      "bajada": "Fabián Beltrán · Odontólogo · Bahía Blanca"
+    },
+    {
+      "tipo": "punto",
+      "numero": 1,
+      "titulo": "Un espacio para cuidar tu sonrisa",
+      "texto": "Atención odontológica profesional, cercana y pensada para acompañarte en cada etapa del cuidado de tu salud bucal."
+    },
+    {
+      "tipo": "lista",
+      "titulo": "Dónde encontrarnos",
+      "items": [
+        "Sixto Laspiur 2677 · Bahía Blanca",
+        "Turnos por WhatsApp: 291 444 0020"
+      ]
+    },
+    {
+      "tipo": "frase",
+      "texto": "Cuidar tu sonrisa también es parte de tu bienestar.",
+      "firma": "F.B. Odontología"
+    },
+    {
+      "tipo": "cta",
+      "titulo": "¿Querés pedir un *turno*?",
+      "nota": "Escribinos por WhatsApp al 291 444 0020 y coordiná tu consulta."
+    }
+  ],
+  "caption": "Bienvenidos a F.B. Odontología 🦷\n\nUn espacio de atención odontológica profesional en Bahía Blanca, pensado para acompañarte en el cuidado de tu salud bucal con cercanía y compromiso.\n\n📍 Sixto Laspiur 2677, Bahía Blanca\n📱 Turnos por WhatsApp: 291 444 0020\n📷 @f.b.odontologia",
+  "hashtags": [
+    "#FBOdontologia",
+    "#Odontologia",
+    "#BahiaBlanca",
+    "#SaludBucal",
+    "#ConsultorioOdontologico"
+  ]
+}

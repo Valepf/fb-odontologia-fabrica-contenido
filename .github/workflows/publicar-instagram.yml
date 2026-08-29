@@ -1,0 +1,72 @@
+name: Publicar en Instagram
+
+# El publicador decide por bloque consumido y no por reloj: se lo puede invocar
+# de más sin duplicar posts, y una corrida perdida se recupera en la siguiente.
+# Corre cada 2 horas para que ninguna caída se coma el post del día.
+on:
+  schedule:
+    - cron: "23 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      simulacro:
+        description: "Simulacro: muestra qué publicaría, sin publicar"
+        type: boolean
+        default: false
+
+concurrency:
+  group: publicar-instagram
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      # El publicador sólo usa módulos nativos de Node y fetch: no hay
+      # dependencias que instalar acá.
+      - name: Publicar
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_BASE: ${{ secrets.IG_GRAPH_BASE }}
+        run: |
+          if [ "${{ inputs.simulacro }}" = "true" ]; then
+            node scripts/publicar.mjs --simulacro | tee respuesta.json
+          else
+            node scripts/publicar.mjs | tee respuesta.json
+          fi
+
+      - name: Guardar el avance de la cola
+        if: success()
+        run: |
+          if git diff --quiet -- cola.json; then
+            echo "La cola no cambió."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cola.json
+          git commit -m "cola: publicado $(node -p "require('./respuesta.json').slug ?? ''")"
+          git push
+
+      - name: Resumen
+        if: always()
+        run: |
+          if [ -f respuesta.json ]; then
+            {
+              echo '### Publicador de Instagram'
+              echo '```json'
+              cat respuesta.json
+              echo
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

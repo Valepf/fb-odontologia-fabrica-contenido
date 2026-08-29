@@ -1,0 +1,570 @@
+/* ============================================================================
+   ESTÉTICA DE CARRUSELES — 1080 × 1350 (4:5)
+   ----------------------------------------------------------------------------
+   Este archivo es LA IDENTIDAD. Se programa una vez y queda congelado.
+   Los JSON de contenido NO pueden tocar la estética: por eso todos los
+   carruseles salen idénticos en estilo y el feed tiene una sola voz visual.
+
+   Lo único que cambia por marca son los tokens de `marca.css`.
+
+   Reglas de diseño que están cableadas acá y no se negocian por post:
+     · Texto alineado a la izquierda y centrado verticalmente en el frame.
+     · Sin drop shadows y sin gradientes decorativos.
+     · El texto NUNCA se apoya sobre una foto: siempre sobre color plano.
+     · Sin paginador y sin pie: Instagram ya los muestra.
+     · Máximo 3 acentos por pieza.
+   ========================================================================== */
+
+/* El orden importa: `marca.css` trae los tokens de la marca con las familias
+   tipográficas de fallback, y `fonts/fuentes.css` —que genera `npm run fuentes`
+   desde marca.json— las pisa con las que están realmente descargadas. Así el
+   nombre de la familia vive en un solo lado y no puede quedar desincronizado.
+   Si nadie bajó las fuentes todavía, queda el fallback y el render igual sale. */
+@import url("marca.css");
+@import url("fonts/fuentes.css");
+
+:root {
+  --W: 1080px;
+  --H: 1350px;
+
+  /* Escala tipográfica. render.mjs baja --escala si un slide desborda. */
+  --escala: 1;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+body {
+  background: #55606e;
+  font-family: var(--texto);
+}
+
+/* --- Chasis del slide -------------------------------------------------- */
+.slide {
+  position: relative;
+  width: var(--W);
+  height: var(--H);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--margen);
+  background: var(--fondo);
+  color: var(--tinta);
+}
+
+/* Los 4 estilos rotativos. Comparten identidad (paleta, tipografía, chip);
+   cambian el color. La rotación la decide el número del slug, nunca el JSON
+   — así en la grilla del perfil nunca quedan dos portadas oscuras
+   consecutivas. */
+
+.estilo-claro {
+  --logo: url(logo-para-fondo-claro.png);
+  --fondo: var(--claro);
+  --tinta: var(--oscuro);
+  --tinta-suave: color-mix(in srgb, var(--oscuro) 62%, var(--claro));
+  --acento: var(--primario);
+  --linea: color-mix(in srgb, var(--oscuro) 12%, var(--claro));
+  --barra: var(--primario);
+  --chip-fondo: color-mix(in srgb, var(--primario) 10%, var(--claro));
+  --chip-tinta: var(--primario);
+}
+
+.estilo-primario {
+  --logo: url(logo-para-fondo-oscuro.png);
+  --fondo: var(--primario);
+  --tinta: var(--claro);
+  --tinta-suave: color-mix(in srgb, var(--claro) 82%, var(--primario));
+  /* El azul institucional es muy oscuro. El acento sobre él se obtiene
+     aclarando el mismo color para conservar la paleta sin perder contraste. */
+  --acento: color-mix(in srgb, var(--claro) 78%, var(--primario));
+  --linea: rgba(255, 255, 255, 0.22);
+  --barra: var(--claro);
+  --chip-fondo: rgba(255, 255, 255, 0.16);
+  --chip-tinta: var(--claro);
+}
+
+.estilo-oscuro {
+  --logo: url(logo-para-fondo-oscuro.png);
+  --fondo: var(--oscuro);
+  --tinta: var(--claro);
+  --tinta-suave: color-mix(in srgb, var(--claro) 62%, var(--oscuro));
+  --acento: color-mix(in srgb, var(--claro) 72%, var(--primario));
+  --linea: rgba(255, 255, 255, 0.14);
+  --barra: var(--primario);
+  --chip-fondo: color-mix(in srgb, var(--primario) 22%, var(--oscuro));
+  --chip-tinta: color-mix(in srgb, var(--primario) 75%, white);
+}
+
+/* Duo: interiores claros. La portada se pinta con el primario más abajo. */
+.estilo-duo {
+  --logo: url(logo-para-fondo-claro.png);
+  --fondo: var(--claro);
+  --tinta: var(--oscuro);
+  --tinta-suave: color-mix(in srgb, var(--oscuro) 62%, var(--claro));
+  --acento: var(--primario);
+  --linea: color-mix(in srgb, var(--oscuro) 12%, var(--claro));
+  --barra: var(--primario);
+  --chip-fondo: color-mix(in srgb, var(--primario) 10%, var(--claro));
+  --chip-tinta: var(--primario);
+}
+
+/* La barra superior firma todos los slides. Sólida — no degradada. */
+.slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: var(--barra);
+  z-index: 3;
+}
+
+/* --- Foto de fondo -------------------------------------------------------
+   La imagen va a baja opacidad SOBRE color sólido, nunca suelta. Así el
+   compuesto siempre tiende al color de marca y el contraste del texto es
+   predecible: no depende de qué foto toque.
+
+   Un slide con foto de fondo es SIEMPRE oscuro, sea cual sea el estilo del
+   carrusel. Dos razones, verificadas en el render:
+     · sobre claro, la imagen al 25% queda tan lavada que parece un error de
+       impresión, no una decisión;
+     · un primario de tono medio no aguanta imagen debajo de texto claro sin
+       caer por debajo del mínimo de contraste.
+
+   Al 40% sobre el oscuro, el peor caso posible es una foto completamente
+   blanca y el titular sigue pasando AA. Por eso la opacidad no es un
+   parámetro del contenido: subirla rompe la legibilidad en silencio.
+   ---------------------------------------------------------------------- */
+.con-fondo {
+  --logo: url(logo-para-fondo-oscuro.png);
+  --fondo: var(--oscuro);
+  --tinta: var(--claro);
+  --tinta-suave: color-mix(in srgb, var(--claro) 86%, var(--oscuro));
+  --acento: var(--primario);
+  --linea: rgba(255, 255, 255, 0.22);
+  --barra: var(--primario);
+  --chip-fondo: color-mix(in srgb, var(--primario) 26%, var(--oscuro));
+  --chip-tinta: color-mix(in srgb, var(--primario) 70%, white);
+}
+
+.con-fondo .marco {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--oscuro);
+  z-index: 0;
+}
+
+.con-fondo .marco img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--encuadre, center);
+  display: block;
+  opacity: 0.4;
+}
+
+.con-fondo .marca-agua {
+  display: none !important;
+}
+
+/* --- Logo ---------------------------------------------------------------
+   Aparece grande y anclado abajo a la izquierda, alineado al mismo margen
+   que el texto — sólo en la portada y en el cierre, que son las placas donde
+   hay aire de sobra y las que más circulan sueltas. En los interiores sobra:
+   cansa y le come espacio al copy.
+
+   Dos archivos con alpha limpio: uno para fondos claros y su versión
+   invertida para fondos oscuros. Nunca deformado ni recoloreado.
+   ---------------------------------------------------------------------- */
+.logo {
+  position: absolute;
+  left: var(--margen);
+  bottom: var(--margen);
+  width: 360px;
+  height: 150px;
+  background: var(--logo) no-repeat left bottom / contain;
+  z-index: 2;
+}
+
+/* Marcas sin archivo de logo: el nombre en la tipografía display. Es una
+   solución honesta, no un parche — mejor un wordmark tipográfico consistente
+   que un logo mal recortado. */
+.logo-texto {
+  position: absolute;
+  left: var(--margen);
+  bottom: var(--margen);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 46px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--tinta);
+  z-index: 2;
+}
+
+/* Deja lugar abajo para que el texto nunca se apoye sobre el logo. Se aplica
+   sólo donde el logo existe: si no, robaría aire a las placas sin logo. */
+.con-logo .cuerpo {
+  padding-bottom: calc(40px * var(--escala) + 178px);
+}
+
+/* --- Cabecera ----------------------------------------------------------
+   El chip de categoría es lo único que va arriba. Fuera del flujo a
+   propósito: si ocupara lugar, el cuerpo se centraría en el espacio sobrante
+   y el texto quedaría ópticamente alto. Flotando, el texto se centra en el
+   frame entero. */
+.cabecera {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: calc(var(--margen) + 14px);
+  left: var(--margen);
+  right: var(--margen);
+  z-index: 2;
+}
+
+.chip {
+  font-family: var(--texto);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--chip-tinta);
+  background: var(--chip-fondo);
+  padding: 12px 22px;
+  border-radius: 999px;
+  line-height: 1;
+}
+
+/* --- Cuerpo ------------------------------------------------------------ */
+.cuerpo {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(40px * var(--escala));
+  padding: calc(40px * var(--escala)) 0;
+  position: relative;
+  z-index: 2;
+  min-height: 0;
+}
+
+/* Highlight de marca: *entre asteriscos*. Color sólido, sin degradado. */
+.hl {
+  color: var(--acento);
+  font-style: normal;
+}
+
+/* --- Tipografía por tipo de slide -------------------------------------- */
+.titulo {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: calc(102px * var(--escala));
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.titulo-medio {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(64px * var(--escala));
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.bajada {
+  font-family: var(--texto);
+  font-weight: 300;
+  font-size: calc(35px * var(--escala));
+  line-height: 1.5;
+  color: var(--tinta-suave);
+  max-width: 22ch;
+}
+
+.parrafo {
+  font-family: var(--texto);
+  font-weight: 300;
+  font-size: calc(35px * var(--escala));
+  line-height: 1.6;
+  color: var(--tinta-suave);
+}
+
+/* --- portada ----------------------------------------------------------- */
+.tipo-portada .cuerpo {
+  gap: calc(34px * var(--escala));
+}
+
+/* Número gigante de marca de agua. Sólo en el estilo claro: en los fondos de
+   color no se lee. Vive arriba a la derecha para no pisar el titular. */
+.tipo-portada.estilo-claro .marca-agua {
+  display: block;
+  position: absolute;
+  right: -14px;
+  top: 58px;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 370px;
+  line-height: 0.8;
+  color: var(--primario);
+  opacity: 0.1;
+  z-index: 1;
+  letter-spacing: -0.04em;
+}
+
+.marca-agua {
+  display: none;
+}
+
+/* --- punto ------------------------------------------------------------- */
+.numero {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: calc(46px * var(--escala));
+  color: var(--acento);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* --- lista ------------------------------------------------------------- */
+.lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(28px * var(--escala));
+}
+
+.lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(24px * var(--escala));
+  font-family: var(--texto);
+  font-weight: 400;
+  font-size: calc(37px * var(--escala));
+  line-height: 1.35;
+}
+
+.lista li::before {
+  content: "";
+  flex: 0 0 auto;
+  width: calc(16px * var(--escala));
+  height: calc(16px * var(--escala));
+  margin-top: calc(17px * var(--escala));
+  border-radius: 50%;
+  background: var(--acento);
+}
+
+/* --- frase ------------------------------------------------------------- */
+.tipo-frase .cuerpo {
+  justify-content: center;
+}
+
+.frase {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: calc(78px * var(--escala));
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.firma-frase {
+  font-family: var(--texto);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+  margin-top: calc(34px * var(--escala));
+}
+
+/* --- stat -------------------------------------------------------------- */
+.tipo-stat .cuerpo {
+  justify-content: center;
+  gap: calc(18px * var(--escala));
+}
+
+.cifra {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: calc(250px * var(--escala));
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  color: var(--acento);
+}
+
+.cifra-pie {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(56px * var(--escala));
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+/* --- Slides con foto ----------------------------------------------------
+   Cualquier slide puede llevar foto, incluida la portada — que es lo que se
+   ve en la grilla del perfil y por lo tanto lo que rompe la monotonía.
+
+   Una sola regla estructural: el texto NUNCA se apoya sobre la imagen, se
+   apoya sobre color plano. Nada de scrims degradados y nada de texto
+   ilegible según qué foto toque.
+
+   Dos encuadres:
+     · pos-arriba   — foto arriba, panel de color abajo
+     · pos-completa — foto a sangre, banda de color abajo ajustada al texto
+   ---------------------------------------------------------------------- */
+.con-foto {
+  padding: 0;
+}
+
+.con-foto .marco {
+  position: absolute;
+  overflow: hidden;
+  background: var(--oscuro);
+}
+
+.con-foto .marco img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--encuadre, center);
+  display: block;
+}
+
+.con-foto .panel {
+  position: absolute;
+  background: var(--panel, var(--fondo));
+  padding: calc(52px * var(--escala)) var(--margen) var(--margen);
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.con-foto .panel .cuerpo {
+  padding: 0 0 calc(30px * var(--escala));
+}
+
+/* Foto arriba, panel abajo: proporción fija. */
+.pos-arriba .marco {
+  inset: 0 0 auto 0;
+  height: 58%;
+}
+
+.pos-arriba .panel {
+  inset: 58% 0 0 0;
+}
+
+/* Foto a sangre: la banda crece con el texto, no al revés. */
+.pos-completa .marco {
+  inset: 0;
+}
+
+.pos-completa .panel {
+  inset: auto 0 0 0;
+}
+
+.pos-completa .panel .cuerpo {
+  flex: 0 0 auto;
+}
+
+/* La cabecera va sobre la foto: necesita colores propios para leerse sea cual
+   sea la imagen. */
+.con-foto .cabecera {
+  top: 46px;
+}
+
+.con-foto .cabecera .chip {
+  background: var(--claro);
+  color: var(--primario);
+}
+
+/* En duo y claro la banda va con el primario — si fuera clara, una foto clara
+   arriba y un panel blanco abajo se leen como una sola mancha. */
+.con-foto.estilo-duo,
+.con-foto.estilo-claro {
+  --panel: var(--primario);
+}
+
+.con-foto.estilo-duo .panel,
+.con-foto.estilo-claro .panel {
+  color: var(--claro);
+}
+
+.con-foto.estilo-duo .panel .titulo,
+.con-foto.estilo-duo .panel .titulo-medio,
+.con-foto.estilo-claro .panel .titulo,
+.con-foto.estilo-claro .panel .titulo-medio {
+  color: var(--claro);
+}
+
+.con-foto.estilo-duo .panel .parrafo,
+.con-foto.estilo-duo .panel .bajada,
+.con-foto.estilo-claro .panel .parrafo,
+.con-foto.estilo-claro .panel .bajada {
+  color: color-mix(in srgb, var(--claro) 82%, var(--primario));
+}
+
+.con-foto.estilo-duo .panel .hl,
+.con-foto.estilo-claro .panel .hl {
+  color: var(--oscuro);
+}
+
+/* En una portada con foto el número de marca de agua estorba. */
+.con-foto .marca-agua {
+  display: none !important;
+}
+
+.tipo-portada.con-foto .panel .cuerpo {
+  justify-content: center;
+}
+
+/* --- duo: portada de color, interiores claros ---------------------------
+   En la grilla del perfil sólo se ven las portadas, así que ahí es donde el
+   estilo tiene que diferenciarse — y contra `primario`, que va de punta a
+   punta, la diferencia se nota al abrir el carrusel. */
+.tipo-portada.estilo-duo:not(.con-fondo) {
+  --logo: url(logo-para-fondo-oscuro.png);
+  --fondo: var(--primario);
+  --tinta: var(--claro);
+  --tinta-suave: color-mix(in srgb, var(--claro) 82%, var(--primario));
+  --acento: color-mix(in srgb, var(--claro) 78%, var(--primario));
+  --linea: rgba(255, 255, 255, 0.22);
+  --barra: var(--claro);
+  --chip-fondo: rgba(255, 255, 255, 0.16);
+  --chip-tinta: var(--claro);
+}
+
+/* --- cta --------------------------------------------------------------- */
+.tipo-cta .cuerpo {
+  justify-content: center;
+  gap: calc(26px * var(--escala));
+}
+
+.cta-titulo {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: calc(86px * var(--escala));
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.cta-dominio {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: calc(46px * var(--escala));
+  letter-spacing: -0.01em;
+  color: var(--acento);
+}
+
+.cta-nota {
+  font-family: var(--texto);
+  font-weight: 300;
+  font-size: calc(31px * var(--escala));
+  line-height: 1.5;
+  color: var(--tinta-suave);
+}
