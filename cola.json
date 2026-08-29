@@ -1,17 +1,12 @@
 {
-  "pendientes": [
+  "pendientes": [],
+  "publicados": [
     {
       "slug": "01-bienvenida-fb",
-      "imagenes": [
-        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1788031115/fb-odontologia/01-bienvenida-fb/01.jpg",
-        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1788031117/fb-odontologia/01-bienvenida-fb/02.jpg",
-        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1788031118/fb-odontologia/01-bienvenida-fb/03.jpg",
-        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1788031119/fb-odontologia/01-bienvenida-fb/04.jpg",
-        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1788031120/fb-odontologia/01-bienvenida-fb/05.jpg"
-      ],
-      "caption": "Bienvenidos a Fabián Beltrán Odontología 🦷\n\nUn espacio pensado para acompañarte en el cuidado de tu salud bucal con atención profesional, cercanía y compromiso.\n\nDeslizá para conocernos y descubrir cómo podemos ayudarte.\n\n📍 Sixto Laspiur 2677, Bahía Blanca\n📲 Turnos por WhatsApp: 291 444 0020\n📷 @f.b.odontologia\n\n#FabianBeltranOdontologia #Odontologia #BahiaBlanca #SaludBucal",
-      "stagedEn": "2026-08-29T19:18:41.161Z"
+      "fecha": "2026-08-29",
+      "bloque": "diario",
+      "mediaId": "18342161662265069",
+      "publicadoEn": "2026-08-29T19:23:42.018Z"
     }
-  ],
-  "publicados": []
+  ]
 }
