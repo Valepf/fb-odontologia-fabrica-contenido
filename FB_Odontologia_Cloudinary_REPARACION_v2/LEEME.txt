@@ -1,5 +1,0 @@
-1. En Cloudinary -> API Keys, copia la API Environment Variable que contiene cloudinary://
-2. NO la pegues en ningun lado.
-3. Ejecuta CONECTAR_CLOUDINARY_PORTAPAPELES.bat
-4. Cuando la consola lo indique, presiona Enter.
-5. El script lee la clave desde el portapapeles, la guarda en .env.local y luego borra el portapapeles.

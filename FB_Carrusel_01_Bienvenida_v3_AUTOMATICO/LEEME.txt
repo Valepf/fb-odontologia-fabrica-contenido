@@ -1,7 +1,0 @@
-Este parche está preparado para la ruta actual del proyecto:
-C:\Users\Valeria\OneDrive\Desktop\FB_Odontologia\FB_Odontologia_Fabrica_Contenido_v1
-
-1. Extraé este ZIP en cualquier lugar.
-2. Hacé doble clic en APLICAR_PARCHE_WINDOWS.bat
-3. El script reemplaza únicamente los archivos necesarios y vuelve a renderizar.
-4. Al finalizar abre automáticamente la carpeta con las cinco placas.

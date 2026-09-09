@@ -1,4 +1,0 @@
-1) Copiá la carpeta "content-studio" de este parche dentro de tu proyecto.
-2) Aceptá reemplazar el archivo existente.
-3) Ejecutá RENDER_PRUEBA_WINDOWS.bat
-4) Abrí las nuevas imágenes generadas y revisalas.
