@@ -1,5 +1,18 @@
 {
-  "pendientes": [],
+  "pendientes": [
+    {
+      "slug": "02-caso-clinico-incisivo-central",
+      "imagenes": [
+        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1789048724/fb-odontologia/02-caso-clinico-incisivo-central/01.jpg",
+        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1789048725/fb-odontologia/02-caso-clinico-incisivo-central/02.jpg",
+        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1789048727/fb-odontologia/02-caso-clinico-incisivo-central/03.jpg",
+        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1789048728/fb-odontologia/02-caso-clinico-incisivo-central/04.jpg",
+        "https://res.cloudinary.com/dbk0cpxh/image/upload/v1789048730/fb-odontologia/02-caso-clinico-incisivo-central/05.jpg"
+      ],
+      "caption": "CASO CLÍNICO | Implante en incisivo central 🦷\n\nEl diente no tenía raíz desde hacía mucho tiempo, por lo que no era posible recuperarlo.\n\nPrimero colocamos un implante en el lugar del diente ausente. Luego trabajamos con una corona provisoria y realizamos controles para acompañar la adaptación de la encía.\n\nEl tratamiento finalizó con una corona sobre el implante y una nueva corona en la pieza adyacente, recuperando función y estética.\n\n¿Querés evaluar tu caso? Escribime y coordinamos un turno.\n\nFabián Beltrán Odontología · Bahía Blanca\n\n#CasoClínico #ImplanteDental #Odontología #RehabilitaciónOral #EstéticaDental #BahíaBlanca",
+      "stagedEn": "2026-09-10T13:58:51.495Z"
+    }
+  ],
   "publicados": [
     {
       "slug": "01-bienvenida-fb",
