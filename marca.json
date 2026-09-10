@@ -10,7 +10,7 @@
   "bloques": [
     {
       "nombre": "diario",
-      "desde": 15
+      "desde": 0
     }
   ],
   "buffer": 7,
